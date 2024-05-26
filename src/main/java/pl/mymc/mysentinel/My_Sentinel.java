@@ -17,14 +17,14 @@ public class My_Sentinel extends JavaPlugin implements Listener {
 
     @Override
     public void onEnable() {
-        saveDefaultConfig(); // Zapisuje domyślny plik konfiguracyjny, jeśli jeszcze nie istnieje
+        saveDefaultConfig();
         LifecycleEventManager<Plugin> manager = this.getLifecycleManager();
         manager.registerEventHandler(LifecycleEvents.COMMANDS, event -> {
             final Commands commands = event.registrar();
             commands.register("mysentinel", "Komenda pluginu My-Sentinel. Wpisz /mys help aby sprawdzic dostępne komendy", new My_SentinelCommand(this));
             commands.register("mys", "Komenda pluginu My-Sentinel. Wpisz /mys help aby sprawdzic dostępne komendy", new My_SentinelCommand(this));
         });
-        List<String> bannedWords = getConfig().getStringList("bannedWords"); // Wczytuje listę zabronionych słów z pliku konfiguracyjnego
+        List<String> bannedWords = getConfig().getStringList("bannedWords");
         this.wordFilter = new WordFilter(bannedWords);
         getServer().getPluginManager().registerEvents(this, this);
     }
