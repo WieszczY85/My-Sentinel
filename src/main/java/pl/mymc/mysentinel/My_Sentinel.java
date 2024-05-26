@@ -14,6 +14,7 @@ import java.util.List;
 public class My_Sentinel extends JavaPlugin implements Listener {
 
     private WordFilter wordFilter;
+    private boolean fullCensorship;
 
     @Override
     public void onEnable() {
@@ -26,6 +27,7 @@ public class My_Sentinel extends JavaPlugin implements Listener {
         });
         List<String> bannedWords = getConfig().getStringList("bannedWords");
         this.wordFilter = new WordFilter(bannedWords);
+        this.fullCensorship = getConfig().getBoolean("fullCensorship");
         getServer().getPluginManager().registerEvents(this, this);
     }
     @Override
@@ -46,6 +48,7 @@ public class My_Sentinel extends JavaPlugin implements Listener {
     public void updateSentinel(){
         List<String> bannedWords = getConfig().getStringList("bannedWords");
         this.wordFilter = new WordFilter(bannedWords);
+        this.fullCensorship = getConfig().getBoolean("fullCensorship");
         getServer().getPluginManager().registerEvents(this, this);
     }
 
@@ -53,7 +56,7 @@ public class My_Sentinel extends JavaPlugin implements Listener {
     public void onChat(AsyncPlayerChatEvent event) {
         String message = event.getMessage();
         if (wordFilter.containsBannedWord(message)) {
-            event.setMessage(wordFilter.censorMessage(message));
+            event.setMessage(wordFilter.censorMessage(message, fullCensorship));
         }
     }
 }
@@ -70,12 +73,12 @@ class WordFilter {
         return bannedWords.stream().anyMatch(message::contains);
     }
 
-    public String censorMessage(String message) {
+    public String censorMessage(String message, boolean fullCensorship) {
         String[] words = message.split("\\s+");
         for (int i = 0; i < words.length; i++) {
             for (String bannedWord : bannedWords) {
                 if (words[i].toLowerCase().contains(bannedWord.toLowerCase())) {
-                    String replacement = words[i].substring(0, 2) + "*".repeat(words[i].length() - 2);
+                    String replacement = fullCensorship ? "*".repeat(words[i].length()) : words[i].substring(0, 2) + "*".repeat(words[i].length() - 2);
                     words[i] = replacement;
                 }
             }
