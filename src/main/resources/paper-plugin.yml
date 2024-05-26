@@ -1,0 +1,4 @@
+name: My-Sentinel
+version: '${project.version}'
+main: pl.mymc.mysentinel.My_Sentinel
+api-version: '1.20'
