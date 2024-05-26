@@ -1,8 +1,12 @@
 package pl.mymc.mysentinel;
 
+import io.papermc.paper.command.brigadier.Commands;
+import io.papermc.paper.plugin.lifecycle.event.LifecycleEventManager;
+import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.List;
@@ -14,6 +18,12 @@ public class My_Sentinel extends JavaPlugin implements Listener {
     @Override
     public void onEnable() {
         saveDefaultConfig(); // Zapisuje domyślny plik konfiguracyjny, jeśli jeszcze nie istnieje
+        LifecycleEventManager<Plugin> manager = this.getLifecycleManager();
+        manager.registerEventHandler(LifecycleEvents.COMMANDS, event -> {
+            final Commands commands = event.registrar();
+            commands.register("mysentinel", "Komenda pluginu My-Sentinel. Wpisz /mys help aby sprawdzic dostępne komendy", new My_SentinelCommand(this));
+            commands.register("mys", "Komenda pluginu My-Sentinel. Wpisz /mys help aby sprawdzic dostępne komendy", new My_SentinelCommand(this));
+        });
         List<String> bannedWords = getConfig().getStringList("bannedWords"); // Wczytuje listę zabronionych słów z pliku konfiguracyjnego
         this.wordFilter = new WordFilter(bannedWords);
         getServer().getPluginManager().registerEvents(this, this);
@@ -41,13 +51,15 @@ class WordFilter {
     }
 
     public String censorMessage(String message) {
-        for (String word : bannedWords) {
-            if (message.toLowerCase().contains(word.toLowerCase())) {
-                String replacement = word.substring(0, 2) + "*".repeat(word.length() - 2);
-                message = message.replaceAll("(?i)" + word, replacement);
+        String[] words = message.split("\\s+");
+        for (int i = 0; i < words.length; i++) {
+            for (String bannedWord : bannedWords) {
+                if (words[i].toLowerCase().contains(bannedWord.toLowerCase())) {
+                    String replacement = words[i].substring(0, 2) + "*".repeat(words[i].length() - 2);
+                    words[i] = replacement;
+                }
             }
         }
-        return message;
+        return String.join(" ", words);
     }
-
 }
