@@ -42,8 +42,12 @@ class WordFilter {
 
     public String censorMessage(String message) {
         for (String word : bannedWords) {
-            message = message.replaceAll("(?i)" + word, "*****");
+            if (message.toLowerCase().contains(word.toLowerCase())) {
+                String replacement = word.substring(0, 2) + "*".repeat(word.length() - 2);
+                message = message.replaceAll("(?i)" + word, replacement);
+            }
         }
         return message;
     }
+
 }
