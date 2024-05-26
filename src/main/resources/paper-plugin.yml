@@ -1,4 +1,7 @@
 name: My-Sentinel
 version: '${project.version}'
 main: pl.mymc.mysentinel.My_Sentinel
-api-version: '1.20'
+author: WieszczY
+website: https://github.com/WieszczY85/My-Sentinel
+api-version: 1.20.6
+description: Plugin filtrujący wulgarne wiadomości na czacie.
