@@ -28,6 +28,26 @@ public class My_Sentinel extends JavaPlugin implements Listener {
         this.wordFilter = new WordFilter(bannedWords);
         getServer().getPluginManager().registerEvents(this, this);
     }
+    @Override
+    public void onDisable() {
+        AsyncPlayerChatEvent.getHandlerList().unregister((Plugin) this);
+    }
+
+    public void restartMySentinelTask() {
+        try {
+            AsyncPlayerChatEvent.getHandlerList().unregister((Plugin) this);
+            super.reloadConfig();
+            updateSentinel();
+        } catch (Exception e) {
+            getLogger().severe("Wystąpił błąd podczas przełądowania konfiguracji: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+    public void updateSentinel(){
+        List<String> bannedWords = getConfig().getStringList("bannedWords");
+        this.wordFilter = new WordFilter(bannedWords);
+        getServer().getPluginManager().registerEvents(this, this);
+    }
 
     @EventHandler
     public void onChat(AsyncPlayerChatEvent event) {

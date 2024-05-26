@@ -23,21 +23,21 @@ public class My_SentinelCommand implements BasicCommand {
                 }
             } else if (args[0].equalsIgnoreCase("version")) {
                 if (stack.getSender().hasPermission("mysentinel.version")) { //	getWebsite()
-                    stack.getSender().sendRichMessage("<gray>#######################################\n#\n#   <gold>→ <bold>" + pdf.getName() + "</bold> ←\n<gray>#   <gold>Autor: <bold>" + pdf.getAuthors() + "</bold>\n<gray>#   <gold>WWW: <bold>" + pdf.getWebsite() + "</bold>\n<gray>#   <gold>Wersja: <bold>" + pdf.getVersion() + "</bold><gray>\n#\n#######################################");
+                    stack.getSender().sendRichMessage("<gray>#######################################\n#\n#   <gold>→ <bold>" + pdf.getName() + "</bold> ←\n<gray>#   <white>Autor: <bold><gold>" + pdf.getAuthors() + "</gold></bold>\n<gray>#   <white>WWW: <bold><gold><click:open_url:'" + pdf.getWebsite() + "'>"  + pdf.getWebsite() + "</click></gold></bold>\n<gray>#   <white>Wersja: <bold><gold>" + pdf.getVersion() + "</gold></bold><gray>\n#\n#######################################");
                 } else {
                     stack.getSender().sendRichMessage("Nie masz uprawnień do tej komendy.");
                 }
             } else if (args[0].equalsIgnoreCase("reload")) {
                 if (stack.getSender().hasPermission("mysentinel.reload")) {
-                    plugin.reloadConfig();
-                    //plugin.restartMySentinelTask();
+                    //plugin.reloadConfig();
+                    plugin.restartMySentinelTask();
                     stack.getSender().sendRichMessage("<green>Plik konfiguracyjny został przeładowany.</green>");
                 } else {
                     stack.getSender().sendRichMessage("Nie masz uprawnień do tej komendy.");
                 }
             }
         } else {
-            stack.getSender().sendRichMessage("<blue>Komenda pluginu My-Sentinel. <green>Wpisz /mam help aby sprawdzic dostępne komendy");
+            stack.getSender().sendRichMessage("<green>Wpisz /mys help aby sprawdzić dostępne komendy");
         }
     }
 }
